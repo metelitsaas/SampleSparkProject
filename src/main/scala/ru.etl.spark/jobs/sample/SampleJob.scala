@@ -28,16 +28,16 @@ object SampleJob extends MainJob {
 
         logger.info(f"Transformations begin")
 
+        // Transformations
         reportPeriods.map { case (reportPeriodBegin, reportPeriodEnd) =>
-            // Transformations
             st.loadCustomerTable // Load source table
                 .transform(st.withMonthEnd) // Add month end column
                 .transform(st.whereReportDt(reportPeriodBegin, reportPeriodEnd)) // Filter DataFrame
                 .transform(st.joinCar) // Join car table
                 .transform(st.withProcessedDttm) // Add processed timestamp
                 .transform(st.repartitionByType("plan")) // Reduce number of partitions
+                .transform(st.load) // Load to target table
         }
-
         logger.info(f"Transformations end")
 
         // Stop Spark session

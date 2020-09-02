@@ -1,7 +1,7 @@
 package ru.etl.spark.jobs.sample
 
 import ru.etl.spark.utils.EnvironmentConfig
-import ru.etl.spark.functions.Transforms
+import ru.etl.spark.functions.{Loaders, Transforms}
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions._
@@ -52,4 +52,13 @@ class SampleTransforms(spark: SparkSession) extends Transforms(spark) {
                on a.customer_id = b.customer_id
                """)
     }
+
+    /* Load target table
+    @param df: Source DataFrame
+    @return : Target DataFrame */
+    def load(df: DataFrame): DataFrame = {
+        Loaders.overwriteTable(df, targetSchema.value)
+        df
+    }
+
 }
