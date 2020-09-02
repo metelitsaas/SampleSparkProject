@@ -54,7 +54,7 @@ class Transforms(spark: SparkSession) {
         val infreqDf = countDf // Infrequent column values
             .where(col("count") <= dataMean + sigma + dataStdDev)
 
-        broadcast(freqDf).union(infreqDf)
+        broadcast(freqDf).union(infreqDf).select(df.columns.map(col): _*)
     }
 
     /* Cast DataFrame timestamp type fields to string
@@ -117,7 +117,7 @@ class Transforms(spark: SparkSession) {
     @return : Path of Hive table folder */
     private def hiveTableLocation(df: DataFrame): String = {
         df.createOrReplaceTempView("df")
-        spark.sql(f"desc formatted $df")
+        spark.sql("desc formatted df")
             .filter("col_name == 'Location'")
             .head(1)(0)
             .getString(0)
