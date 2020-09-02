@@ -8,7 +8,10 @@ import java.sql.Timestamp
 import org.scalatest.BeforeAndAfterEach
 
 
-class TransformsSuite extends QueryTest with SharedSparkSession with BeforeAndAfterEach {
+class TransformsSuite
+    extends QueryTest
+        with SharedSparkSession
+        with BeforeAndAfterEach {
 
     import testImplicits._
 

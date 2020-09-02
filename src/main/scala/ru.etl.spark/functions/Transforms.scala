@@ -8,6 +8,7 @@ import org.apache.spark.sql.expressions.Window
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types._
 
+
 /* Class of general DataFrame transforms
 @param sparkSessionConfig: Config of SparkSession */
 class Transforms(spark: SparkSession) {
