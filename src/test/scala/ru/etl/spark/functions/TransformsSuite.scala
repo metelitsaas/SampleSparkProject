@@ -1,19 +1,19 @@
 package ru.etl.spark.functions
 
 import org.apache.spark.sql.QueryTest
-import org.apache.spark.sql.test.SharedSparkSession
+import org.apache.spark.sql.hive.test.TestHiveSingleton
+import org.scalatest.BeforeAndAfterEach
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.functions._
 import java.sql.Timestamp
-import org.scalatest.BeforeAndAfterEach
 
 
 class TransformsSuite
     extends QueryTest
-        with SharedSparkSession
+        with TestHiveSingleton
         with BeforeAndAfterEach {
 
-    import testImplicits._
+    import spark.implicits._
 
     private var t: Transforms = _
 
@@ -63,11 +63,10 @@ class TransformsSuite
         )
     }
 
-    // TODO: Add broadcastFrequentSkew test
     ignore("broadcastFrequentSkew transform should broadcast skewed part of DataFrame") {}
 
-    test("""castTimestampsToStrings transform should return DataFrame with TimeStamp columns
-            casted to String columns""") {
+    test("""castTimestampsToStrings transform should return DataFrame with
+         TimeStamp columns casted to String columns""") {
         val sourceDf = Seq((1, Timestamp.valueOf("2020-01-01 12:00:00")))
             .toDF("int", "datetime")
 

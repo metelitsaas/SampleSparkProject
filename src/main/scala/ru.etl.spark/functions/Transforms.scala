@@ -21,8 +21,6 @@ class Transforms(spark: SparkSession) {
             lit(f"${Functions.processedDttm}").cast(TimestampType))
     }
 
-    // TODO: Add DataFrameWriter
-
     /* Broadcast long tail of DataFrame to resolve data skew
     @param columns: Sequence of Columns with skew
     @param sigma: Sigma value

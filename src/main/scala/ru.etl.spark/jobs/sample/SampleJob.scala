@@ -30,13 +30,13 @@ object SampleJob extends MainJob {
 
         // Transformations
         reportPeriods.map { case (reportPeriodBegin, reportPeriodEnd) =>
-            st.loadCustomerTable // Load source table
+            st.readSourceTable() // Load source table
                 .transform(st.withMonthEnd) // Add month end column
                 .transform(st.whereReportDt(reportPeriodBegin, reportPeriodEnd)) // Filter DataFrame
-                .transform(st.joinCar) // Join car table
+                .transform(st.joinCar()) // Join car table
                 .transform(st.withProcessedDttm) // Add processed timestamp
                 .transform(st.repartitionByType("plan")) // Reduce number of partitions
-                .transform(st.load) // Load to target table
+                .transform(st.load()) // Load to target table
         }
         logger.info(f"Transformations end")
 

@@ -1,10 +1,12 @@
 package ru.etl.spark.utils
 
-import org.scalatest.FunSuite
+import org.scalatest.{BeforeAndAfterAll, FunSuite}
 import org.apache.spark.sql.SparkSession
 
 
-class MainJobSuite extends FunSuite {
+class MainJobSuite extends FunSuite with BeforeAndAfterAll {
+
+    private var spark: SparkSession = _
 
     object ObjectMainJobTest extends MainJob {
 
@@ -15,25 +17,31 @@ class MainJobSuite extends FunSuite {
         }
     }
 
-    test("MainJob should create SparkSession") {
+    override def beforeAll(): Unit = {
+        super.beforeAll()
+
         val args = Array("ENV=dev")
         ObjectMainJobTest.main(args)
+        spark = ObjectMainJobTest.sparkTest
+    }
 
-        val spark = ObjectMainJobTest.sparkTest
+    override def afterAll(): Unit = {
+        try {
+            spark.stop()
+        } finally {
+            super.afterAll()
+        }
+    }
+
+    test("MainJob should create SparkSession") {
 
         assert(spark.sql("select count(*)").first.get(0) == 1)
 
     }
 
     test("MainJob should define application name") {
-        val args = Array("ENV=dev")
-        ObjectMainJobTest.main(args)
-
-        val spark = ObjectMainJobTest.sparkTest
-
         val appName = spark.conf.get("spark.app.name")
 
         assert(appName == "ObjectMainJobTest")
     }
-
 }
