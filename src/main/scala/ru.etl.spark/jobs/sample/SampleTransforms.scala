@@ -20,7 +20,7 @@ class SampleTransforms(spark: SparkSession) extends Transforms(spark) {
     private val carsTable = spark.sparkContext.broadcast(f"$sourceSchema.cars")
 
     // Hive target
-    private val dmTable = spark.sparkContext.broadcast(f"$sourceSchema.dm_final")
+    private val dmTable = spark.sparkContext.broadcast(f"$targetSchema.dm_final")
 
     // Transformations list
     /* Load source table
